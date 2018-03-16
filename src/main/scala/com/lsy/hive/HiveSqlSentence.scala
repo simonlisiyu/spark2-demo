@@ -89,6 +89,23 @@ class HiveSqlSentence {
                          |    avg_time <= 25 AND avg_time >=6
                          | """.stripMargin
 
+  val selectFromLateralViewExpolde = s"""
+                                        | SELECT
+                                        |    a.city_id,
+                                        |    a.id,
+                                        |    a.in_id,
+                                        |    a.start_time,
+                                        |    a.end_time,
+                                        |    a.out_id
+                                        | FROM
+                                        |    test_table a
+                                        |     LATERAL VIEW explode(id) id as t
+                                        | WHERE
+                                        |    a.city_id = ${cityId} AND
+                                        |    size(a.id) > 3 AND
+                                        |    t.average_speed < 0.667
+                                        | """.stripMargin
+
   /**
     * compute
     * Hive常用函数大全一览
